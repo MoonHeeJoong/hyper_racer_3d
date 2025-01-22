@@ -1,0 +1,4 @@
+repository "hyper_racer_3d/hyper_racer_3d@1103954@cloud"
+  path "/"
+    br "/main"
+    co "/main"
