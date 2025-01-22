@@ -29,6 +29,7 @@ public class GameManager : Singleton<GameManager>
     //int consumeGasPerSecond = 1;
     int consumeGasPerZ = 10;
     float lastGasConsumeZ = 0;
+    public float lastSpawnZ = 0; //spawner에서 사용
 
     float timer = 0;
 

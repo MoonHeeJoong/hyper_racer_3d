@@ -7,7 +7,7 @@ public class GasSpawner : MonoBehaviour
     public GameObject gasPrefab;
     CarController car;
 
-    float lastSpawnZ = 0;
+    
     public float spawnInterval = 15;
 
     //Gas x Positions
@@ -26,15 +26,15 @@ public class GasSpawner : MonoBehaviour
             }
         }
 
-        if(car.transform.position.z > lastSpawnZ + spawnInterval){
-            lastSpawnZ = car.transform.position.z;
+        if(car.transform.position.z > GameManager.Instance.lastSpawnZ + spawnInterval){
+            GameManager.Instance.lastSpawnZ = car.transform.position.z;
             SpawnGas();
         }
     }
 
     void SpawnGas(){
         int randomIndex = Random.Range(0, gasXPositions.Length);
-        Vector3 spawnPosition = new Vector3(gasXPositions[randomIndex], 0.5f, lastSpawnZ + 20);
+        Vector3 spawnPosition = new Vector3(gasXPositions[randomIndex], 0.5f, GameManager.Instance.lastSpawnZ + 20);
         GameManager.Instance.objectList.Add(Instantiate(gasPrefab, spawnPosition, Quaternion.identity));
     }
     
