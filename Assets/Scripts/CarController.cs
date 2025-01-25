@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class CarController : MonoBehaviour
@@ -16,9 +17,12 @@ public class CarController : MonoBehaviour
     float[] moveXPositions = new float[]{-1.5f, -0.5f, 0.5f, 1.5f};
     int currentXPositionIndex = 2;
     bool isMovingX = false;
+
+
    
-    void Update()
+    void FixedUpdate()
     {
+        
 
         if(inputHandler == null)
         {
@@ -50,15 +54,12 @@ public class CarController : MonoBehaviour
 
         Vector3 targetPosition = transform.position;
         targetPosition.x = moveXPositions[currentXPositionIndex];
-        transform.position = Vector3.Lerp(transform.position, targetPosition, 0.02f); //handling speed
+        transform.position = Vector3.Lerp(transform.position, targetPosition, 0.1f); //handling speed
         if(Vector3.Distance(transform.position, targetPosition) < 0.1f)
         {
             isMovingX = false;
         }
-
-                
-
-
+        
         if(mainCamera == null)
         {
             mainCamera = Camera.main;
@@ -77,9 +78,16 @@ public class CarController : MonoBehaviour
     {
         if(other.CompareTag("Gas"))
         {
+            GameManager.Instance.objectList.Remove(other.gameObject);   
             GameManager.Instance.ChargeGas();
             Destroy(other.gameObject);
         }
-    }
 
+        if(other.CompareTag("Enemy"))
+        {
+            GameManager.Instance.objectList.Remove(other.gameObject);   
+            GameManager.Instance.EndGame();
+            Destroy(other.gameObject);
+        }
+    }
 }

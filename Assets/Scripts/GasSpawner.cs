@@ -9,6 +9,7 @@ public class GasSpawner : MonoBehaviour
 
     
     public float spawnInterval = 15;
+    int spawnCount = 0;
 
     //Gas x Positions
     float[] gasXPositions = new float[]{-1.5f, -0.5f, 0.5f, 1.5f};
@@ -16,6 +17,8 @@ public class GasSpawner : MonoBehaviour
 
     void Update(){
         if(GameManager.Instance.gameState != GAMESTATE.PLAYING){
+            spawnInterval = 15;
+            spawnCount = 0;
             return;
         }
 
@@ -26,16 +29,39 @@ public class GasSpawner : MonoBehaviour
             }
         }
 
-        if(car.transform.position.z > GameManager.Instance.lastSpawnZ + spawnInterval){
-            GameManager.Instance.lastSpawnZ = car.transform.position.z;
+        if(car.transform.position.z > GameManager.Instance.lastGasSpawnZ + spawnInterval){
+            GameManager.Instance.lastGasSpawnZ = car.transform.position.z;
             SpawnGas();
         }
+
+        DestoryGas();
+
+        // //난이도업
+        // if(spawnCount > 4){
+        //     spawnInterval++;
+        //     spawnCount = 0;
+        // }
+        // else{
+        //     spawnCount++;
+        // }
     }
 
     void SpawnGas(){
         int randomIndex = Random.Range(0, gasXPositions.Length);
-        Vector3 spawnPosition = new Vector3(gasXPositions[randomIndex], 0.5f, GameManager.Instance.lastSpawnZ + 20);
+        Vector3 spawnPosition = new Vector3(gasXPositions[randomIndex], 0, GameManager.Instance.lastGasSpawnZ + 20);
         GameManager.Instance.objectList.Add(Instantiate(gasPrefab, spawnPosition, Quaternion.identity));
     }
     
+    void DestoryGas(){
+        foreach(GameObject obj in GameManager.Instance.objectList){
+            if(obj == null){
+                continue;
+            }
+            if(obj.transform.position.z < car.transform.position.z - 10){
+                if(obj.tag == "Gas"){
+                    Destroy(obj);
+                }
+            }
+        }
+    }
 }

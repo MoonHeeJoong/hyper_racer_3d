@@ -16,6 +16,11 @@ public class GameManager : Singleton<GameManager>
     //ui controller
     public UIManager uiManager;
     public GameUIController gameUIController;
+
+
+    //Spawners
+    public GasSpawner gasSpawner;
+    public EnemySpawner enemySpawner;
     
 
     [NonSerialized] public CarController car;
@@ -29,10 +34,13 @@ public class GameManager : Singleton<GameManager>
     //int consumeGasPerSecond = 1;
     int consumeGasPerZ = 10;
     float lastGasConsumeZ = 0;
-    public float lastSpawnZ = 0; //spawner에서 사용
+    public float lastGasSpawnZ = 0; //spawner에서 사용
+    public float lastEnemySpawnZ = 0; //spawner에서 사용
 
     float timer = 0;
 
+    //Main Light for day and night
+    public Light mainLight;
 
     //관리를 위한 리스트
     public List<GameObject> objectList = new List<GameObject>();
@@ -48,6 +56,9 @@ public class GameManager : Singleton<GameManager>
 
         currentGas = maxGas;
         lastGasConsumeZ = 0;
+        
+        lastEnemySpawnZ = 0;
+        lastGasSpawnZ = 0;
 
         uiManager.ShowGameUI();
         gameUIController.UpdateGas(currentGas, maxGas);
@@ -117,5 +128,13 @@ public class GameManager : Singleton<GameManager>
         currentGas = Mathf.Clamp(currentGas + chargeGas, 0, maxGas);
 
         gameUIController.UpdateGas(currentGas, maxGas);
+    }
+
+    public bool IsNight(){
+        if(mainLight == null){
+            return false;
+        }
+
+        return mainLight.transform.rotation.eulerAngles.x > 180;
     }
 }

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Map
   - Gas
+  - Enemy
   layers:
   - Default
   - TransparentFX
